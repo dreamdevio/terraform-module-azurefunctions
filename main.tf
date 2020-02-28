@@ -2,6 +2,13 @@ terraform {
     required_version = ">= 0.12"
 }
 
+variable "service_bus_topics" {
+  type = set(string)
+}
+
+variable "core_resource_group_name" {
+}
+
 variable "environment" {
     description = "The environment that this deployment will apply to. Such as DEV, QA, PROD."
 }
@@ -61,4 +68,13 @@ resource "azurerm_function_app" "fa" {
     tags = {
         environment = var.environment
     }
+}
+
+resource "azurerm_servicebus_topic" "topic" {
+    for_each = var.service_bus_topics
+  name                = each.value
+  resource_group_name = var.core_resource_group_name
+  namespace_name      = "${var.core_resource_group_name}sbn"
+
+  enable_partitioning = true
 }
