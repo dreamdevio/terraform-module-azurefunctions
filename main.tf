@@ -7,10 +7,6 @@ variable "service_bus_topics" {
 }
 
 variable "service_bus_subscriptions" {
-  type = set(object({
-    name = string  
-    topic = string
-  }))
 }
 
 variable "core_resource_group_name" {
@@ -88,9 +84,9 @@ resource "azurerm_servicebus_topic" "topic" {
 
 resource "azurerm_servicebus_subscription" "subscription" {
     for_each = var.service_bus_subscriptions
-  name                = each.name
+  name                = each.key
   resource_group_name = var.core_resource_group_name
   namespace_name      = "${var.core_resource_group_name}sbn"
-  topic_name          = each.topic
+  topic_name          = each.value
   max_delivery_count  = 1
 }
