@@ -6,6 +6,10 @@ variable "service_bus_topics" {
   type = set(string)
 }
 
+variable "service_bus_subscriptions" {
+  type = set(string)
+}
+
 variable "core_resource_group_name" {
 }
 
@@ -77,4 +81,13 @@ resource "azurerm_servicebus_topic" "topic" {
   namespace_name      = "${var.core_resource_group_name}sbn"
 
   enable_partitioning = true
+}
+
+resource "azurerm_servicebus_subscription" "subscripition" {
+    for_each = var.service_bus_subscriptions
+  name                = azurerm_servicebus_topic.topic.name
+  resource_group_name = var.core_resource_group_name
+  namespace_name      = "${var.core_resource_group_name}sbn"
+  topic_name          = each.value
+  max_delivery_count  = 1
 }
