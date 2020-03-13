@@ -1,0 +1,1 @@
+terraform init -backend-config="storage_account_name=$ARM_BACKEND_STORAGEACCOUNTNAME" -backend-config="container_name=$ARM_BACKEND_CONTAINERNAME" -backend-config="key=$backend_container_key"

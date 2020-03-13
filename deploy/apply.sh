@@ -1,0 +1,1 @@
+terraform apply -var="environment=$LB_ENVIRONMENT" -var="core_resource_group_name=$core_resource_group_name"
