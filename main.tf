@@ -15,10 +15,6 @@ variable "core_resource_group_name" {
 variable "environment" {
     type        = string
     description = "The environment that this deployment will apply to. Such as DEV, QA, PROD."
-    validation {
-        condition     = length(var.environment) >= 1 && length(var.environment) >= 4
-        error_message = "The environemtn value must be between 1 to 4 characters long."
-    }
 }
 
 variable "resource_group_name" {
