@@ -3,7 +3,7 @@ terraform {
 }
 
 variable "service_bus_topics" {
-  type = set(string)
+    type = set(string)
 }
 
 variable "service_bus_subscriptions" {
@@ -13,7 +13,12 @@ variable "core_resource_group_name" {
 }
 
 variable "environment" {
+    type        = string
     description = "The environment that this deployment will apply to. Such as DEV, QA, PROD."
+    validation {
+        condition     = length(var.environment) >= 1 && length(var.environment) >= 4
+        error_message = "The environemtn value must be between 1 to 4 characters long."
+    }
 }
 
 variable "resource_group_name" {
@@ -21,7 +26,7 @@ variable "resource_group_name" {
 }
 
 provider "azurerm" {
-    version         = "1.36.0"
+    version = "1.36.0"
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -34,7 +39,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_storage_account" "sa" {
-    name                     = "${var.environment}${replace(var.resource_group_name, ".", "")}sa"
+    name                     = "${var.environment}${substr(replace(var.resource_group_name, ".", ""), 0, 18)}sa"
     resource_group_name      = azurerm_resource_group.rg.name
     location                 = azurerm_resource_group.rg.location
     account_tier             = "Standard"
