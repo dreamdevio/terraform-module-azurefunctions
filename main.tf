@@ -34,8 +34,8 @@ locals {
     solution_rg_name    = "rg-${var.solution_name}-${var.environment}"
     solution_sb_name    = "sb-${var.solution_name}-${var.environment}"
     default_tags        = {
-        environment = var.environment
-        solution    = var.solution_name
+        Env          = var.environment
+        SolutionName = var.solution_name
     }
 }
 
