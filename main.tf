@@ -38,6 +38,7 @@ locals {
     default_tags        = {
         Env          = var.environment
         SolutionName = var.solution_name
+        ServiceName  = var.service_name
     }
 }
 
@@ -46,7 +47,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-    name     = "rg-${var.resource_group_name}-${var.environment}"
+    name     = "rg-${var.service_name}-${var.environment}"
     location = var.location
 
     tags = local.default_tags
