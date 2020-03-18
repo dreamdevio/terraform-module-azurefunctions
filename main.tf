@@ -22,17 +22,19 @@ variable "location" {
     description = "Azure location to deploy the resources. Eg.: northeurope, eastus, and etc."
 }
 
-variable "service_bus_topic" {
-    type        = string
+variable "service_bus_topics" {
+    type        = set(string)
     description = "Service bus topic to publish service aggregate domain events."
 }
 
 variable "service_bus_subscriptions" {
+    description = "Key pair of Service bus topics to create a subscription."
 }
 
 locals {
     solution_rg_name    = "rg-${var.solution_name}-${var.environment}"
     solution_sb_name    = "sb-${var.solution_name}-${var.environment}"
+
     default_tags        = {
         Env          = var.environment
         SolutionName = var.solution_name
@@ -46,7 +48,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "rg" {
     name     = "rg-${var.resource_group_name}-${var.environment}"
     location = var.location
-    
+
     tags = local.default_tags
 }
 
@@ -56,7 +58,7 @@ resource "azurerm_storage_account" "st" {
     location                 = azurerm_resource_group.rg.location
     account_tier             = "Standard"
     account_replication_type = "LRS"
-    
+
     tags = local.default_tags
 }
 
@@ -70,7 +72,7 @@ resource "azurerm_app_service_plan" "plan" {
         tier = "Dynamic"
         size = "Y1"
     }
-    
+
     tags = local.default_tags
 }
 
@@ -85,11 +87,12 @@ resource "azurerm_function_app" "func" {
 }
 
 resource "azurerm_servicebus_topic" "topic" {
-    name                = "sbt-${var.service_bus_topic}"
-    resource_group_name = local.solution_rg_name
-    namespace_name      = local.solution_sb_name
+    for_each = var.service_bus_topics
+        name                = "sbt-${each.value}"
+        resource_group_name = local.solution_rg_name
+        namespace_name      = local.solution_sb_name
 
-    enable_partitioning = false
+        enable_partitioning = false
 }
 
 resource "azurerm_servicebus_subscription" "subscription" {
