@@ -2,9 +2,9 @@ terraform {
     required_version = ">= 0.12"
 }
 
-variable "solution_name" {
+variable "ecosystem_name" {
     type        = string
-    description = "Solution name."
+    description = "Ecosystem name."
 }
 
 variable "environment" {
@@ -32,13 +32,13 @@ variable "service_bus_subscriptions" {
 }
 
 locals {
-    solution_rg_name    = "rg-${var.solution_name}-${var.environment}"
-    solution_sb_name    = "sb-${var.solution_name}-${var.environment}"
+    ecosystem_rg_name    = "rg-${var.ecosystem_name}-${var.environment}"
+    ecosystem_sb_name    = "sb-${var.ecosystem_name}-${var.environment}"
 
     default_tags        = {
-        Env          = var.environment
-        SolutionName = var.solution_name
-        ServiceName  = var.service_name
+        Env           = var.environment
+        EcosystemName = var.ecosystem_name
+        ServiceName   = var.service_name
     }
 }
 
@@ -90,8 +90,8 @@ resource "azurerm_function_app" "func" {
 resource "azurerm_servicebus_topic" "topic" {
     for_each = var.service_bus_topics
         name                = "sbt-${each.value}"
-        resource_group_name = local.solution_rg_name
-        namespace_name      = local.solution_sb_name
+        resource_group_name = local.ecosystem_rg_name
+        namespace_name      = local.ecosystem_sb_name
 
         enable_partitioning = false
 }
@@ -99,8 +99,8 @@ resource "azurerm_servicebus_topic" "topic" {
 resource "azurerm_servicebus_subscription" "subscription" {
     for_each = var.service_bus_subscriptions
         name                = each.value
-        resource_group_name = local.solution_rg_name
-        namespace_name      = local.solution_sb_name
+        resource_group_name = local.ecosystem_rg_name
+        namespace_name      = local.ecosystem_sb_name
         topic_name          = "sbt-${each.key}"
         max_delivery_count  = 1
 }
