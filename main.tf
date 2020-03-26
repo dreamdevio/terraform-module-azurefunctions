@@ -2,6 +2,11 @@ terraform {
     required_version = ">= 0.12"
 }
 
+provider "azurerm" {
+    version = "=2.0.0"
+    features {}
+}
+
 variable "ecosystem_name" {
     type        = string
     description = "Ecosystem name."
@@ -42,10 +47,6 @@ locals {
     }
 }
 
-provider "azurerm" {
-    version = "1.36.0"
-}
-
 resource "azurerm_resource_group" "rg" {
     name     = "rg-${var.service_name}-${var.environment}"
     location = var.location
@@ -83,6 +84,7 @@ resource "azurerm_function_app" "func" {
     resource_group_name       = azurerm_resource_group.rg.name
     app_service_plan_id       = azurerm_app_service_plan.plan.id
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
+    version = "~3"
     
     tags = local.default_tags
 }
