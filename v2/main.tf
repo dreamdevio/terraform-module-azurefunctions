@@ -91,7 +91,7 @@ resource "azurerm_function_app" "func" {
     version = "~3"
 
     auth_settings {
-        var.extra_function_app_configs.auth_settings
+        value = var.extra_function_app_configs.auth_settings
     }
 
     tags = local.default_tags
