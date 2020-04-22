@@ -90,7 +90,7 @@ resource "azurerm_function_app" "func" {
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
     version = "~3"
 
-    auth.settings = var.extra_function_app_configs.auth_settings
+    auth_settings = var.extra_function_app_configs.auth_settings
 
     tags = local.default_tags
 }
