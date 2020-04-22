@@ -92,14 +92,27 @@ resource "azurerm_function_app" "func" {
 
     dynamic "auth_settings" {
         content { 
-            var.extra_function_app_configs.auth_settings
+            for_each = var.function_app_auth_settings.attributes
+            each.key = each.value
+
+            for_each = var.function_app_auth_settings.blocks
+            dynamic each.key {
+                content { 
+                    each.value 
+                }
+            }
         }
     }
 
-    auth_settings {
-        value = var.extra_function_app_configs.auth_settings
-    }
+    # auth_settings {
+    #     enabled = var.extra_function_app_configs.auth_settings.enabled
+    #     issuer = var.extra_function_app_configs.auth_settings.issuer
 
+    #     active_directory {
+    #         client_id = var.extra_function_app_configs.auth_settings.active_directory.client_id
+    #     }
+    # }
+    
     tags = local.default_tags
 }
 
