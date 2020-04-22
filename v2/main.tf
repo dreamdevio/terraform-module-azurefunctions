@@ -91,13 +91,15 @@ resource "azurerm_function_app" "func" {
     version = "~3"
 
      auth_settings {
-        for attribute in var.function_app_auth_settings.attributes:
-        attribute.key = attribute.value
+        for attribute in var.function_app_auth_settings.attributes: {
+            attribute.key = attribute.value
+        }
 
-        for block in var.function_app_auth_settings.blocks
-        dynamic block.key {
-            content { 
-                block.value 
+        for block in var.function_app_auth_settings.blocks: {
+            dynamic block.key {
+                content { 
+                    block.value 
+                }
             }
         }
     }
