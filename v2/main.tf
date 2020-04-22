@@ -27,7 +27,7 @@ variable "location" {
     description = "Azure location to deploy the resources. Eg.: northeurope, eastus, and etc."
 }
 
-variable "extra_function_app_configs" {
+variable "function_app_auth_settings" {
     description = "extra_function_app_configs"
 }
 
