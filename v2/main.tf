@@ -90,16 +90,14 @@ resource "azurerm_function_app" "func" {
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
     version = "~3"
 
-    dynamic "auth_settings" {
-        content { 
-            for_each = var.function_app_auth_settings.attributes
-            each.key = each.value
+     auth_settings {
+        for_each = var.function_app_auth_settings.attributes
+        each.key = each.value
 
-            for_each = var.function_app_auth_settings.blocks
-            dynamic each.key {
-                content { 
-                    each.value 
-                }
+        for_each = var.function_app_auth_settings.blocks
+        dynamic each.key {
+            content { 
+                each.value 
             }
         }
     }
