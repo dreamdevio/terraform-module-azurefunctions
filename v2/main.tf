@@ -27,8 +27,8 @@ variable "location" {
     description = "Azure location to deploy the resources. Eg.: northeurope, eastus, and etc."
 }
 
-variable "function_app_auth_settings" {
-    description = "auth setting configuration for the function app"
+variable "extra_function_app_configs" {
+    description = "extra_function_app_configs"
 }
 
 variable "service_bus_topics" {
@@ -90,7 +90,7 @@ resource "azurerm_function_app" "func" {
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
     version = "~3"
 
-    auth_settings = var.function_app_auth_settings
+    var.extra_function_app_configs
 
     tags = local.default_tags
 }
