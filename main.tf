@@ -91,8 +91,8 @@ resource "azurerm_function_app" "func" {
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
     version = "~3"
     
-    app_settings {
-        APPINSIGHTS_INSTRUMENTATIONKEY = data.azurerm_application_insights.appi.instrumentation_key
+    app_settings = {
+        "APPINSIGHTS_INSTRUMENTATIONKEY" = "${data.azurerm_application_insights.appi.instrumentation_key}"
     }
 
     tags = local.default_tags
