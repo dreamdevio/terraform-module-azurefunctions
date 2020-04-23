@@ -78,6 +78,11 @@ resource "azurerm_app_service_plan" "plan" {
     tags = local.default_tags
 }
 
+data "azurerm_application_insights" "appi" {
+  name                = "appi-${var.ecosystem_name}-${var.environment}"
+  resource_group_name = local.ecosystem_rg_name
+}
+
 resource "azurerm_function_app" "func" {
     name                      = "func-${var.service_name}-${var.environment}"
     location                  = azurerm_resource_group.rg.location
@@ -86,6 +91,10 @@ resource "azurerm_function_app" "func" {
     storage_connection_string = azurerm_storage_account.st.primary_connection_string
     version = "~3"
     
+    app_settings {
+        "APPINSIGHTS_INSTRUMENTATIONKEY" = data.azurerm_application_insights.appi.instrumentation_key
+    }
+
     tags = local.default_tags
 }
 
