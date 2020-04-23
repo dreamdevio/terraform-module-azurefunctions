@@ -92,7 +92,7 @@ resource "azurerm_function_app" "func" {
     version = "~3"
     
     app_settings {
-        "APPINSIGHTS_INSTRUMENTATIONKEY" = "${data.azurerm_application_insights.appi.instrumentation_key}"
+        APPINSIGHTS_INSTRUMENTATIONKEY = data.azurerm_application_insights.appi.instrumentation_key
     }
 
     tags = local.default_tags
